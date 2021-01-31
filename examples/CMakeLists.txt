@@ -4,3 +4,4 @@ project(examples CXX)
 set(CMAKE_CXX_STANDARD 11)
 
 add_subdirectory(basic)
+add_subdirectory(multiple)
