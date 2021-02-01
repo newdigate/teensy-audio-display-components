@@ -44,7 +44,7 @@ void setup() {
   TFT.fillScreen(ST7735_BLACK);
   for (int i=0;i<16; i++) {
       levelViews[i].draw();
-      currentLevels[i] = rand() % 128;
+      currentLevels[i] = rand() % 4096;
   }
   audioLevelAnnotationView1.draw();
   audioLevelAnnotationView2.draw();
@@ -52,12 +52,12 @@ void setup() {
 
 void loop() {
     for (int i=0;i<16; i++) {
-        levelViews[i].updateLevel(currentLevels[i] / 128.0);
-        currentLevels[i] += ( rand() % 7 ) - 3;
-        currentLevels[i] %= 128;
+        levelViews[i].updateLevel(currentLevels[i] / 4096.0);
+        currentLevels[i] += ( rand() % 33 ) - 16;
+        currentLevels[i] %= 4096;
         if (currentLevels[i] < 0) currentLevels[i] = 0;
     }
-    delay(10);
+    delay(1);
 }
 
 #ifdef BUILD_FOR_OPENGL_EMULATOR
