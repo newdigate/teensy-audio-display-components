@@ -52,10 +52,11 @@ void setup() {
 
 void loop() {
     for (int i=0;i<16; i++) {
-        levelViews[i].updateLevel(currentLevels[i] / 4096.0);
         currentLevels[i] += ( rand() % 33 ) - 16;
         currentLevels[i] %= 4096;
         if (currentLevels[i] < 0) currentLevels[i] = 0;
+
+        levelViews[i].updateLevel(currentLevels[i] / 4096.0);
     }
     delay(1);
 }

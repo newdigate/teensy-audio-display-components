@@ -12,6 +12,7 @@ ST7735_t3 TFT = ST7735_t3(TFT_CS, TFT_DC, TFT_RST);
 #endif
 
 AudioLevelView scopeViewCV1 = AudioLevelView(TFT, ST7735_GREEN, ST7735_BLACK, 10, 10, 64, 10);
+AudioLevelView scopeViewCV2 = AudioLevelView(TFT, ST7735_GREEN, ST7735_BLACK, 42, 10, 64, 10);
 
 void setup() {
   Serial.begin(9600);
@@ -22,14 +23,20 @@ void setup() {
   scopeViewCV1.draw();
 }
 
-int currentLevel = 0;
+int currentLevel1 = 0;
+int currentLevel2 = 1023;
 
 void loop() {
-    scopeViewCV1.updateLevel(currentLevel / 1024.0);
-    currentLevel --;
-    if (currentLevel < 0)
-        currentLevel = 1023;
-    currentLevel %= 1024;
+    scopeViewCV1.updateLevel(currentLevel1 / 1024.0);
+    scopeViewCV2.updateLevel(currentLevel2 / 1024.0);
+
+    currentLevel1 --;
+    if (currentLevel1 < 0)
+        currentLevel1 = 1023;
+
+    currentLevel2++;
+    currentLevel2 %= 1024;
+
     delay(10);
 }
 #ifdef BUILD_FOR_OPENGL_EMULATOR

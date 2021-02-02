@@ -11,16 +11,20 @@ uint16_t alphaBlendRGB565( uint32_t fg, uint32_t bg, uint8_t alpha )
 void AudioLevelView::draw() {
     if (_currentLevel < 0.0) return;
 
-    int currentHeight = 1.0/log(2.0) * _height * log(1.0 + _currentLevel);
-    int previousHeight = 1.0/log(2.0) * _height * log(1.0 + _previousLevel);
-    //_tft->drawFastVLine(_xOffset, 128-height, height, _color);
-    //_tft->drawFastVLine(_xOffset, 0, 128 - height, _backgroundColor);
+    int currentHeight = int(1.0/log(10.0) * _height * float(16) * log(1.0 + 9.0 * _currentLevel));
+    if (currentHeight == _currentHeight) {
+        return;
+    }
 
-    if (currentHeight > previousHeight) {
+    uint8_t new_top = currentHeight / 16;
+    uint8_t new_shade = currentHeight % 16;
+    //if (new_shade > 0) new_top ++;
+
+    if (new_top >= _top) {
         // need to add pixels
-        int deltaPixels = (currentHeight - previousHeight);
-        for (int i=0;i<deltaPixels;i++) {
-            uint8_t alpha = (previousHeight + i) * 4;
+        int deltaPixels = new_top - _top;
+        for (int i=0;i<deltaPixels-1;i++) {
+            uint8_t alpha = (_currentHeight/16 + i) * 4;
             uint16_t color;
             if (alpha > 127) {
                 color = alphaBlendRGB565(ST7735_RED, ST7735_YELLOW , 2 * (alpha-127));
@@ -28,18 +32,55 @@ void AudioLevelView::draw() {
             else {
                 color = alphaBlendRGB565(ST7735_YELLOW, _color, alpha * 2);
             }
-            _tft->drawFastHLine(_xOffset, _yOffset + _height - (previousHeight + i), _width, color);
-//            _tft->drawPixel(_xOffset, _yOffset + _height - (previousHeight + i), color);
+            _tft->drawFastHLine(_xOffset, _yOffset + _height - (_top + i), _width, color);
         }
-    } else if (currentHeight < previousHeight) {
-        int deltaPixels = (previousHeight - currentHeight );
+
+        uint8_t alpha = (currentHeight/16) * 4;
+        uint16_t color;
+        if (alpha > 127) {
+            color = alphaBlendRGB565(ST7735_RED, ST7735_YELLOW , 2 * (alpha-127));
+        }
+        else {
+            color = alphaBlendRGB565(ST7735_YELLOW, _color, alpha * 2);
+        }
+        color = alphaBlendRGB565(color, _backgroundColor, new_shade * 16);
+        _tft->drawFastHLine(_xOffset, (_yOffset + _height - (_top + deltaPixels)), _width, color);
+
+        if (_fraction != 16) {
+            uint8_t alpha = (_top) * 4;
+            if (alpha > 127) {
+                color = alphaBlendRGB565(ST7735_RED, ST7735_YELLOW , 2 * (alpha-127));
+            }
+            else {
+                color = alphaBlendRGB565(ST7735_YELLOW, _color, alpha * 2);
+            }
+            _tft->drawFastHLine(_xOffset, (_yOffset + _height - _top)+1, _width, color);
+        }
+
+    } else if (new_top < _top) {
+        int deltaPixels = _top - new_top;
+
         for (int i=0;i<deltaPixels;i++) {
-            _tft->drawFastHLine(_xOffset, _yOffset + _height - (previousHeight - i), _width, _backgroundColor);
-            //_tft->drawPixel(_xOffset, _yOffset + _height - (previousHeight - i), _backgroundColor);
+            _tft->drawFastHLine(_xOffset, _yOffset + _height - (_top - i), _width, _backgroundColor);
+        }
+
+        if (new_shade > 0) {
+            uint8_t alpha = (currentHeight/16) * 4;
+            uint16_t color;
+            if (alpha > 127) {
+                color = alphaBlendRGB565(ST7735_RED, ST7735_YELLOW , 2 * (alpha-127));
+            }
+            else {
+                color = alphaBlendRGB565(ST7735_YELLOW, _color, alpha * 2);
+            }
+
+            color = alphaBlendRGB565(color, _backgroundColor, new_shade * 16);
+            _tft->drawFastHLine(_xOffset, _yOffset + _height - (_top - deltaPixels), _width, color);
         }
     }
+    _top = new_top;
+    _fraction = new_shade;
 
-    _previousLevel = _currentLevel;
 }
 
 void AudioLevelView::updateLevel(float newLevel) {

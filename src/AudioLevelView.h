@@ -38,6 +38,10 @@ private:
     ST7735_t3 *_tft;
     float _currentLevel = 0.0, _previousLevel = 0.0;
 
+    uint8_t _top;
+    uint8_t _fraction;
+    uint16_t _currentHeight;
+
     int16_t _backgroundColor;
     int16_t _color;
     int8_t _yOffset;
