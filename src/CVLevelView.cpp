@@ -1,14 +1,14 @@
-#include "AudioLevelView.h"
+#include "CVLevelView.h"
 #include "alphaBlendRGB565.h"
 
-void AudioLevelView::draw() {
+void CVLevelView::draw() {
     if (_currentLevel < 0.0) return;
 
-    int currentHeight = int(1.0/log(10.0) * _height * float(16) * log(1.0 + 9.0 * _currentLevel));
+    int currentHeight = _height  *  _currentLevel/65535;
     if (currentHeight == _currentHeight) {
         return;
     }
-
+    // work-in-progress!! please look somewhere else
     uint8_t new_top = currentHeight / 16;
     uint8_t new_shade = currentHeight % 16;
     //if (new_shade > 0) new_top ++;
@@ -76,10 +76,9 @@ void AudioLevelView::draw() {
 
 }
 
-void AudioLevelView::updateLevel(float newLevel) {
-    if (newLevel > 1.0) newLevel = 1.0;
-    if (_currentLevel != abs(newLevel)) {
-        _currentLevel = abs(newLevel);
+void CVLevelView::updateLevel(uint16_t newLevel) {
+    if (_currentLevel != newLevel) {
+        _currentLevel = newLevel;
         draw();
     }
 }

@@ -1,19 +1,17 @@
 //
 // Created by Nicholas Newdigate on 13/04/2020.
 //
-#ifndef TEENSY_AUDIO_DISPLAY_COMPONENTS_AUDIO_LEVEL_VIEW_H
-#define TEENSY_AUDIO_DISPLAY_COMPONENTS_AUDIO_LEVEL_VIEW_H
+
+#ifndef TEENSY_AUDIO_DISPLAY_COMPONENTS_CV_LEVEL_VIEW_H
+#define TEENSY_AUDIO_DISPLAY_COMPONENTS_CV_LEVEL_VIEW_H
 
 #include "Arduino.h"
 #include <ST7735_t3.h> // Hardware-specific library
 
-#undef swap
-#include <functional>
-using namespace std;
 
-class AudioLevelView {
+class CVLevelView {
 public:
-    inline AudioLevelView(
+    inline CVLevelView(
             ST7735_t3 &tft,
             int16_t color,
             int16_t backgroundColor,
@@ -31,11 +29,11 @@ public:
     };
 
     void draw();
-    void updateLevel(float newLevel);
+    void updateLevel(uint16_t newLevel);
 
 private:
     ST7735_t3 *_tft;
-    float _currentLevel = 0.0, _previousLevel = 0.0;
+    uint16_t _currentLevel = 0.0, _previousLevel = 0.0;
 
     uint8_t _top;
     uint8_t _fraction;
@@ -49,4 +47,4 @@ private:
     uint8_t _width;
 };
 
-#endif //TEENSY_AUDIO_DISPLAY_COMPONENTS_AUDIO_LEVEL_VIEW_H
+#endif //TEENSY_AUDIO_DISPLAY_COMPONENTS_CV_LEVEL_VIEW_H
