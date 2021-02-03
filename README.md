@@ -3,4 +3,5 @@
 
 ![multiple](docs/multiple_example.gif)
 
-* [youtube](https://youtu.be/1PGVviOpSBU)
+## videos
+* [youtube: Audio level display components I've been working on recently](https://youtu.be/1PGVviOpSBU)
