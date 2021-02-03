@@ -2,7 +2,8 @@
 * audio display components for st7735 and teensy
 
 ## components
-* vu meter
+* vu level meter
+
 ![multiple](docs/multiple_example.gif)
 
 ## videos
