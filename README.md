@@ -1,6 +1,8 @@
 # teensy audio display components
-* experimental vu meter display component for st7735 and teensy
+* audio display components for st7735 and teensy
 
+## components
+* vu meter
 ![multiple](docs/multiple_example.gif)
 
 ## videos
