@@ -33,11 +33,11 @@ public:
 
 private:
     ST7735_t3 *_tft;
-    uint16_t _currentLevel = 0.0, _previousLevel = 0.0;
+    uint16_t _currentLevel = 32786, _previousLevel = 32786;
 
-    uint8_t _top;
+    int8_t _top = 0;
     uint8_t _fraction;
-    uint16_t _currentHeight;
+    int16_t _currentHeight;
 
     int16_t _backgroundColor;
     int16_t _color;

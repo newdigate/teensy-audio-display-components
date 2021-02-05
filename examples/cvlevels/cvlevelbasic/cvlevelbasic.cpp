@@ -22,16 +22,31 @@ void setup() {
   scopeViewCV1.draw();
 }
 
-int currentLevel = 0;
+uint16_t currentLevel = 32786;
 
 void loop() {
+    while (Serial.available()) {
+        int i = Serial.read();
+        if (i > 0)
+            Serial.printf("input: %d\n", i);
+
+    }
+    //Serial.printf(":%d\n",currentLevel );
     scopeViewCV1.updateLevel(currentLevel);
     currentLevel --;
-    delay(10);
+    delay(1);
+}
+
+void my_yield() {
+    if(!TFT.shouldClose()) {
+        TFT.update();
+    }
 }
 
 #ifdef BUILD_FOR_OPENGL_EMULATOR
 int main() {
+    yield_impl = my_yield;
+
     setup();
     while(!TFT.shouldClose()) {
         loop();
