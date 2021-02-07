@@ -33,8 +33,9 @@ void loop() {
     }
     //Serial.printf(":%d\n",currentLevel );
     scopeViewCV1.updateLevel(currentLevel);
-    currentLevel --;
-    delay(1);
+    currentLevel ++;
+    if (currentLevel % 16 == 0)
+        delay(1);
 }
 
 void my_yield() {
