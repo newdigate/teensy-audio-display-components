@@ -4,19 +4,18 @@
 void AudioLevelView::draw() {
     if (_currentLevel < 0.0) return;
 
-    int currentHeight = int(1.0/log(10.0) * _height * float(16) * log(1.0 + 9.0 * _currentLevel));
+    int currentHeight = int(1.0/log(10.0) * _height * 16.0 * log(1.0 + 9.0 * _currentLevel));
     if (currentHeight == _currentHeight) {
         return;
     }
 
     uint8_t new_top = currentHeight / 16;
     uint8_t new_shade = currentHeight % 16;
-    //if (new_shade > 0) new_top ++;
 
     if (new_top >= _top) {
         // need to add pixels
         int deltaPixels = new_top - _top;
-        for (int i=0;i<deltaPixels-1;i++) {
+        for (int i=0;i<deltaPixels;i++) {
             uint8_t alpha = (_currentHeight/16 + i) * 4;
             uint16_t color;
             if (alpha > 127) {
@@ -73,7 +72,7 @@ void AudioLevelView::draw() {
     }
     _top = new_top;
     _fraction = new_shade;
-
+    _currentHeight = currentHeight;
 }
 
 void AudioLevelView::updateLevel(float newLevel) {

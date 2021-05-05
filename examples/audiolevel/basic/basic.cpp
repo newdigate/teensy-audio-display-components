@@ -2,6 +2,7 @@
 #include "AudioLevelView.h"
 
 #ifdef BUILD_FOR_OPENGL_EMULATOR
+#include <st7735_opengl_main.h>
 #include "st7735_opengl.h"
 st7735_opengl TFT = st7735_opengl();
 #else
@@ -19,24 +20,34 @@ void setup() {
   TFT.initR(INITR_144GREENTAB);
   TFT.setRotation(3);
   TFT.fillScreen(ST7735_BLACK);
+  TFT.useFrameBuffer(true);
+  TFT.updateScreenAsync(true);
   scopeViewCV1.draw();
 }
 
 int currentLevel = 0;
 
+char serialInput[255];
+uint8_t serialInputIndex = 0;
+
 void loop() {
-    scopeViewCV1.updateLevel(currentLevel / 1024.0);
-    currentLevel --;
-    if (currentLevel < 0)
-        currentLevel = 1023;
-    currentLevel %= 1024;
+    while (Serial.available()) {
+        int i = Serial.read();
+        if (i >= 0) {
+            if (i != 10) {
+                serialInput[serialInputIndex] = (char) i;
+                serialInputIndex++;
+            } else {
+                serialInput[serialInputIndex] = 0;
+                Serial.printf("input: %s\n", serialInput);
+                serialInputIndex = 0;
+                char *p_end;
+                currentLevel = strtol(serialInput, &p_end, 10);
+                scopeViewCV1.updateLevel(currentLevel / 1024.0);
+            }
+        }
+
+    }
+
     delay(10);
 }
-#ifdef BUILD_FOR_OPENGL_EMULATOR
-int main() {
-    setup();
-    while(!TFT.shouldClose()) {
-        loop();
-    }
-}
-#endif
