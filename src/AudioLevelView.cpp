@@ -19,10 +19,10 @@ void AudioLevelView::draw() {
             uint8_t alpha = (_currentHeight/16 + i) * 4;
             uint16_t color;
             if (alpha > 127) {
-                color = alphaBlendRGB565(ST7735_RED, ST7735_YELLOW , 2 * (alpha-127));
+                color = blendRGB565(ST7735_RED, ST7735_YELLOW, 2 * (alpha - 127));
             }
             else {
-                color = alphaBlendRGB565(ST7735_YELLOW, _color, alpha * 2);
+                color = blendRGB565(ST7735_YELLOW, _color, alpha * 2);
             }
             _tft->drawFastHLine(_xOffset, _yOffset + _height - (_top + i), _width, color);
         }
@@ -30,21 +30,21 @@ void AudioLevelView::draw() {
         uint8_t alpha = (currentHeight/16) * 4;
         uint16_t color;
         if (alpha > 127) {
-            color = alphaBlendRGB565(ST7735_RED, ST7735_YELLOW , 2 * (alpha-127));
+            color = blendRGB565(ST7735_RED, ST7735_YELLOW, 2 * (alpha - 127));
         }
         else {
-            color = alphaBlendRGB565(ST7735_YELLOW, _color, alpha * 2);
+            color = blendRGB565(ST7735_YELLOW, _color, alpha * 2);
         }
-        color = alphaBlendRGB565(color, _backgroundColor, new_shade * 16);
+        color = blendRGB565(color, _backgroundColor, new_shade * 16);
         _tft->drawFastHLine(_xOffset, (_yOffset + _height - (_top + deltaPixels)), _width, color);
 
         if (_fraction != 16) {
             uint8_t alpha = (_top) * 4;
             if (alpha > 127) {
-                color = alphaBlendRGB565(ST7735_RED, ST7735_YELLOW , 2 * (alpha-127));
+                color = blendRGB565(ST7735_RED, ST7735_YELLOW, 2 * (alpha - 127));
             }
             else {
-                color = alphaBlendRGB565(ST7735_YELLOW, _color, alpha * 2);
+                color = blendRGB565(ST7735_YELLOW, _color, alpha * 2);
             }
             _tft->drawFastHLine(_xOffset, (_yOffset + _height - _top)+1, _width, color);
         }
@@ -60,13 +60,13 @@ void AudioLevelView::draw() {
             uint8_t alpha = (currentHeight/16) * 4;
             uint16_t color;
             if (alpha > 127) {
-                color = alphaBlendRGB565(ST7735_RED, ST7735_YELLOW , 2 * (alpha-127));
+                color = blendRGB565(ST7735_RED, ST7735_YELLOW, 2 * (alpha - 127));
             }
             else {
-                color = alphaBlendRGB565(ST7735_YELLOW, _color, alpha * 2);
+                color = blendRGB565(ST7735_YELLOW, _color, alpha * 2);
             }
 
-            color = alphaBlendRGB565(color, _backgroundColor, new_shade * 16);
+            color = blendRGB565(color, _backgroundColor, new_shade * 16);
             _tft->drawFastHLine(_xOffset, _yOffset + _height - (_top - deltaPixels), _width, color);
         }
     }
