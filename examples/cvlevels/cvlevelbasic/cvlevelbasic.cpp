@@ -40,7 +40,7 @@ void loop() {
 
 void my_yield() {
     if(!TFT.shouldClose()) {
-        TFT.update();
+        delay(1);
     }
 }
 
